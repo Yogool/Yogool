@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yogool- AI Search Engine</title>
+    <meta name="description" content="Discover Yogool, the conversational AI Search Engine using the revolutionary RankWell algorithm for accurate, relevant results. Privacy-focused, voice-enabled, and generates code.">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #007bff; /* A vibrant blue, derived from your palette */
+            --secondary-color: #FF6F61; /* Your requested pink/orange */
+            --gradient-start: #96DCF8; /* Your requested light blue */
+            --gradient-end: #007bff;    /* A darker blue for gradient end */
+            --text-color: #444; /* Slightly darker text for readability */
+            --light-text-color: #f0f0f0; /* Very light gray for contrast on dark backgrounds */
+            --background-color: #f5fafd; /* A soft, very light blue background */
+            --card-background: #fff;
+            --border-radius: 10px;
+            --padding-section: 80px 0;
+            --container-max-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            overflow-x: hidden; /* Prevent horizontal scroll issues with animations */
+        }
+
+        .container {
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Typography --- */
+        h1, h2, h3 {
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            color: var(--light-text-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .light-text h1,
+        .light-text h2,
+        .light-text h3,
+        .light-text p,
+        .light-text ul,
+        .light-text li {
+            color: var(--light-text-color);
+        }
+
+        /* --- Buttons --- */
+        .btn-primary,
+        .btn-secondary,
+        .btn-outline {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease, background-color 0.3s ease, opacity 0.3s ease;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            color: var(--light-text-color);
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background-color: var(--light-text-color);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary:hover {
+             transform: translateY(-3px) scale(1.02);
+             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+             background-color: var(--primary-color);
+             color: var(--light-text-color);
+             border-color: var(--light-text-color);
+        }
+
+        .btn-outline {
+            background: none;
+            color: var(--light-text-color);
+            border: 2px solid var(--light-text-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--light-text-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+
+        /* --- Nav --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        nav .logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--light-text-color);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            color: var(--light-text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* --- Hero Section --- */
+        .hero-section {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--light-text-color);
+            padding: var(--padding-section) 0 100px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden; /* Needed for potential background animations */
+        }
+
+        .hero-content {
+            text-align: center;
+            margin-top: 50px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            margin-bottom: 15px;
+        }
+
+        .hero-content h2 {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            color: var(--light-text-color);
+        }
+
+        .hero-content p {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* Removed .hero-image-placeholder styles as no image is present */
+
+
+        /* --- General Section Styles --- */
+        section {
+            padding: var(--padding-section);
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            border-radius: 2px;
+        }
+
+        .gradient-background {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--light-text-color);
+        }
+
+        /* --- Problem/Solution Section --- */
+        .problem-solution-section {
+            background-color: var(--light-text-color);
+        }
+        .solution-content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        .solution-text {
+            flex: 1;
+        }
+        /* Removed .solution-image-placeholder styles as no image is present */
+
+
+        /* --- How It Works Section --- */
+        .how-it-works-section .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .rankwell-content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .rankwell-explanation {
+            flex: 1;
+            font-size: 1.1em;
+        }
+
+        .rankwell-example {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin: 30px 0;
+        }
+
+        .rankwell-example h3 {
+            color: #FFFF00; /* Directly using your requested yellow for highlights */
+            margin-top: 0;
+        }
+
+        .rankwell-example ul {
+            list-style: disc;
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        .rankwell-example ul li {
+             margin-bottom: 10px;
+        }
+        .rankwell-example strong {
+            color: #FFFF00; /* Directly using your requested yellow for highlights */
+        }
+
+        /* Removed .rankwell-image-placeholder styles as no image is present */
+
+
+        /* --- Features Section --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-item {
+            background-color: var(--card-background);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-item .icon {
+            font-size: 3em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .feature-item h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .feature-item p {
+            font-size: 1em;
+            color: #555;
+        }
+
+        /* --- CTA Section --- */
+        .cta-section {
+            text-align: center;
+            padding: var(--padding-section);
+        }
+
+        .cta-section h2 {
+            font-size: 2.8em;
+            color: var(--light-text-color);
+        }
+
+        .cta-section p {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: #222;
+            color: #ccc;
+            padding: 40px 0 20px;
+            font-size: 0.9em;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--light-text-color);
+            margin-bottom: 20px; /* Mobile spacing */
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-right: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:last-child {
+            margin-right: 0;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        .footer-social a {
+            color: #ccc;
+            font-size: 1.5em;
+            margin-left: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            color: var(--secondary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid #444;
+            padding-top: 20px;
+        }
+
+        /* --- Animations --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        /* --- Responsive Design --- */
+        @media (max-width: 992px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2em; }
+            h3 { font-size: 1.6em; }
+            p { font-size: 1em; }
+
+            nav {
+                flex-direction: column;
+                padding: 15px 0;
+            }
+            nav .logo {
+                margin-bottom: 15px;
+            }
+            nav ul {
+                flex-direction: column;
+            }
+            nav ul li {
+                margin: 10px 0;
+            }
+            nav ul li a {
+                font-size: 1.1em;
+            }
+            .btn-outline {
+                margin-top: 0; /* Adjust for mobile nav */
+            }
+
+            .hero-section {
+                padding: 120px 0 80px;
+            }
+            .hero-content {
+                margin-top: 0;
+            }
+            .hero-content h1 {
+                font-size: 2.5em;
+            }
+            .hero-content h2 {
+                font-size: 1.5em;
+            }
+            .hero-content p {
+                font-size: 1.1em;
+                max-width: none;
+            }
+
+            .solution-content,
+            .rankwell-content {
+                flex-direction: column;
+                gap: 30px;
+            }
+            /* Removed image placeholder ordering */
+
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-logo {
+                margin-bottom: 20px;
+            }
+            .footer-links {
+                margin-bottom: 20px;
+            }
+            .footer-links a {
+                margin: 0 10px;
+                display: inline-block; /* Allow them to wrap */
+            }
+            .footer-social {
+                margin-bottom: 20px;
+            }
+            .footer-social a {
+                 margin: 0 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.8em; margin-bottom: 30px;}
+            h3 { font-size: 1.4em; }
+            p { font-size: 1em; }
+
+            .btn-primary, .btn-secondary {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+
+            .hero-content h1 { font-size: 2em; }
+            .hero-content h2 { font-size: 1.2em; }
+            .hero-content p { font-size: 1em; }
+
+            .section-title h2 { font-size: 1.8em;}
+
+            .rankwell-example {
+                padding: 15px;
+            }
+
+            .feature-item {
+                padding: 20px;
+            }
+            .feature-item .icon {
+                font-size: 2.5em;
+            }
+            .feature-item h3 {
+                font-size: 1.3em;
+            }
+
+            .cta-section h2 { font-size: 2em; }
+            .cta-section p { font-size: 1.1em; }
+
+            .footer-links a {
+                 margin: 5px 8px;
+                 display: inline-block;
+            }
+             .footer-social a {
+                 margin: 0 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero-section">
+        <div class="container">
+            <nav>
+                <div class="logo">Yogool</div>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How it Works</a></li>
+                    <li><a href="#privacy">Privacy</a></li>
+                    <li><a href="#cta" class="btn-outline">Get Started</a></li>
+                </ul>
+            </nav>
+
+            <div class="hero-content">
+                <h1>Discover Truth, Effortlessly.</h1>
+                <h2>Powered by RankWell.</h2>
+                <p>Yogool is more than a search engine. It's a conversational AI that understands you, delivers highly relevant information using its unique ranking algorithm, respects your privacy, and even helps you code.</p>
+                <a href="https:yogool.web.app" class="btn-primary">Try Yogool Now</a>
+                </div>
+        </div>
+    </header>
+
+    <section class="problem-solution-section fade-in">
+        <div class="container">
+            <div class="section-title">
+                <h2>The Problem with Traditional AI Search</h2>
+                <p>Current AI search often treats everything found online as equally valid, leading to inaccurate or irrelevant summaries.</p>
+            </div>
+            <div class="solution-content">
+                <div class="solution-text">
+                    <h3>Yogool's Solution: Precision & Relevance</h3>
+                    <p>Unlike others, Yogool doesn't just crawl; it *curates*. Our advanced RankWell algorithm rigorously assesses the quality and relevance of sources before synthesizing information, ensuring you get reliable answers every time.</p>
+                </div>
+                </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works-section gradient-background fade-in">
+        <div class="container">
+            <div class="section-title light-text">
+                <h2>How Yogool Works: The RankWell Algorithm</h2>
+                <p>Our core innovation is RankWell, an algorithm designed to prioritize genuinely valuable web pages.</p>
+            </div>
+            <div class="rankwell-content">
+                <div class="rankwell-explanation light-text">
+                    <p>Instead of just looking at keywords or popularity, RankWell focuses on a crucial signal of credibility: the quality of outbound links.</p>
+                    <div class="rankwell-example">
+                        <h3>RankWell in Action:</h3>
+                        <p>Imagine two pages, Page A and Page B, both with 18 links.</p>
+                        <ul>
+                            <li><strong>Page A:</strong> 12 links point to high-quality, reputable sources.</li>
+                            <li><strong>Page B:</strong> Only 6 links point to high-quality sources.</li>
+                        </ul>
+                        <p><strong>Result:</strong> Yogool's RankWell ranks <strong>Page A higher</strong> because its authors demonstrate a commitment to referencing credible information, signaling higher trustworthiness and relevance for your queries.</p>
+                    </div>
+                    <p>This filtered, high-quality information is then sent to our advanced LLM to generate accurate, concise, and conversational summaries.</p>
+                </div>
+                </div>
+        </div>
+    </section>
+
+    <section id="features" class="features-section fade-in">
+        <div class="container">
+            <div class="section-title">
+                <h2>Experience the Future of Search</h2>
+                <p>Yogool offers a suite of features designed for the modern digital explorer.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item slide-up">
+                    <i class="fas fa-comments icon"></i>
+                    <h3>Conversational AI</h3>
+                    <p>Ask questions naturally and get detailed, human-like responses synthesized from the best sources.</p>
+                </div>
+                <div class="feature-item slide-up" style="animation-delay: 0.1s;">
+                    <i class="fas fa-code icon"></i>
+                    <h3>Code Generation</h3>
+                    <p>Need a code snippet? Yogool can understand your requirements and generate functional code examples.</p>
+                </div>
+                <div class="feature-item slide-up" style="animation-delay: 0.2s;">
+                    <i class="fas fa-microphone-alt icon"></i>
+                    <h3>Advanced Voice Mode</h3>
+                    <p>Talk to Yogool! Use your voice for queries and receive spoken answers, hands-free.</p>
+                </div>
+                <div class="feature-item slide-up" style="animation-delay: 0.3s;">
+                    <i class="fas fa-shield-alt icon"></i>
+                    <h3>Unwavering Privacy</h3>
+                    <p id="privacy">Your searches are your own. Yogool does not gather user data, ensuring your privacy is paramount.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cta" class="cta-section gradient-background fade-in">
+        <div class="container light-text">
+            <h2>Ready to try a Smarter Search?</h2>
+            <p>Experience accurate, relevant, and private search with Yogool.</p>
+            <a href="https://yogool.web.app" class="btn-secondary">Launch Yogool</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">Yogool</div>
+                
+                <div class="footer-social">
+                    <a href="https://x.com/@YogoolAI"><i class="fab fa-twitter"></i></a>
+                    <a href="https://github.com/Yogool"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Function to check if an element is in the viewport
+            function isInViewport(element) {
+                const rect = element.getBoundingClientRect();
+                return (
+                    rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.bottom >= 0 &&
+                    rect.left <= (window.innerWidth || document.documentElement.clientWidth) &&
+                    rect.right >= 0
+                );
+            }
+
+            // Function to add 'is-visible' class to elements in viewport
+            function animateOnScroll() {
+                const elements = document.querySelectorAll('.fade-in, .slide-up');
+                elements.forEach(element => {
+                    if (isInViewport(element)) {
+                        element.classList.add('is-visible');
+                    }
+                });
+            }
+
+            // Add scroll event listener
+            window.addEventListener('scroll', animateOnScroll);
+
+            // Initial check on page load
+            animateOnScroll();
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - (document.querySelector('nav').offsetHeight + 20), // Adjust for fixed header if needed
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
